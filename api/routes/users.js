@@ -5,7 +5,7 @@ const { User } = require('../models');
 const { asyncHandler } = require('../middleware/async-handler');
 const { authenticateUser } = require('../middleware/authenticate');
 
-// returns all users and filters out not needed attributes
+// returns user and filters out not needed attributes
 router.get('/', authenticateUser, asyncHandler(async(req,res,next) => {
   let user = await User.findOne({
     where: {

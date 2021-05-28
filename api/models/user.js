@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "firstName is a required field.",
+          msg: "First Name is a required field.",
         },
         notNull: {
-          msg: "firstName is a required field.",
+          msg: "First Name is a required field.",
         }
       }
     },
@@ -27,10 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "lastName is a required field",
+          msg: "Last Name is a required field",
         },
         notNull: {
-          msg: "lastName is a required field",
+          msg: "Last Name is a required field",
         }
       }
     },
@@ -38,17 +38,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: {
-        msg: "emailAddress already exists",
+        msg: "Email Address already exists",
       },      
       validate: {
         notEmpty: {
-          msg: "emailAddress is a required field",
+          msg: "Email Address is a required field",
         },
         notNull: {
-          msg: "emailAddress is a required field",
+          msg: "Email Address is a required field",
         },
         isEmail: {
-          msg: "Not a valid email"
+          msg: "Not a valid Email Address"
         }
       }
     },
@@ -57,10 +57,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "password is a required field",
+          msg: "Password is a required field",
         },
         notNull: {
-          msg: "password is a required field",
+          msg: "Password is a required field",
         }
       },
       set(value) {
