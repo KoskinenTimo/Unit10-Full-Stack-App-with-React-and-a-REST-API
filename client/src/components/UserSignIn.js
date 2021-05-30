@@ -1,12 +1,19 @@
-import axios from 'axios';
 import React, { Component } from 'react';
+import Validation from './Validation';
+
 
 export default class UserSignIn extends Component {
 
   state = {
     emailAddress: '',
     password: '',
-    error: null
+    errors: []
+  }
+
+  componentDidMount() {
+    if (this.props.context.authUser) {
+      this.props.history.push('/');
+    }
   }
 
   cancel = (e) => {
@@ -28,32 +35,25 @@ export default class UserSignIn extends Component {
   submit = (e) => {
     e.preventDefault();
     const { emailAddress, password } = this.state;
-    const encodedCredentials = btoa(`${emailAddress}:${password}`)
-    
-    axios.get("http://localhost:5000/api/users", { headers: {'Authorization': `Basic ${encodedCredentials}`} })
-      .then(response => {
-        console.log(response.data);
+    const { from } = this.props.location.state || { from: { pathname: '/'} };
+    const encodedCredentials = btoa(`${emailAddress}:${password}`);
+
+    this.props.context.actions.signIn(encodedCredentials)
+      .then(user => {
+        
+        if (user) {
+          this.props.history.push(from);
+        } else {
+          const errors = ['Sign in was unsuccesful!'];
+          this.setState({ errors });
+        }
       })
       .catch(err => {
-        const error = err.response.data.message;
-        this.setState({ error });
-        console.error(err.response.data);
-      });
-  }
-
-  showErrors = () => {
-    if (this.state.error) {      
-      return (
-        <div className="validation--errors">
-          <h3>Validation Errors</h3>
-          <ul>
-              <li>{this.state.error}</li>
-          </ul>
-        </div>
-      );
-    } else {
-      return null;
-    }
+        console.error(err);
+        console.log("test");
+        this.props.history.push('/error')
+      })
+    
   }
 
   render() {
@@ -61,7 +61,7 @@ export default class UserSignIn extends Component {
       <main>
         <div className="form--centered" >
           <h2>Sign In</h2>
-          {this.showErrors()}
+          <Validation errors={this.state.errors} />
           <form onSubmit={this.submit} >
             <label htmlFor="emailAddress" >Email Address</label>
             <input id="emailAddress" name="emailAddress" type="email" onChange={this.change} />

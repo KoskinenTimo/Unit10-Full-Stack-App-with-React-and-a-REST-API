@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import Validation from './Validation';
+
 
 export default class UserSignUp extends Component {
 
@@ -40,7 +43,7 @@ export default class UserSignUp extends Component {
         }      
       })
       .catch(err => {
-        if (err.status = 400 ) {
+        if (err.response.status === 400 ) {
           const errors = err.response.data;
           this.setState({ errors });
         } else {
@@ -49,28 +52,12 @@ export default class UserSignUp extends Component {
       });
   }
 
-  showErrors = () => {
-    if (this.state.errors.length) {
-      const errors = this.state.errors.map((error, index) => <li key={index}>{error}</li>)
-      return (
-        <div className="validation--errors">
-          <h3>Validation Errors</h3>
-          <ul>
-              {errors}
-          </ul>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
-
   render() {
     return (
       <main>
         <div className="form--centered">
           <h2>Sign up</h2>
-          {this.showErrors()}
+          <Validation errors={this.state.errors} />
           <form onSubmit={this.submit}>
             <label htmlFor="firstName">First Name</label>
             <input id="firstName" name="firstName" type="text" onChange={this.change} />
@@ -85,7 +72,7 @@ export default class UserSignUp extends Component {
             <button className="button" type="submit">Sign Up</button>
             <button className="button button-secondary" onClick={this.cancel}>Cancel</button>
           </form>
-          <p>Already have a user account? Click here <a href="#">Sign in</a>!</p>
+          <p>Already have a user account? Click here <Link to="/signin">Sign in</Link>!</p>
         </div>
       </main>
     );

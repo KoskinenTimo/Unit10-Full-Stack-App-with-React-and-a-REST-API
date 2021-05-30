@@ -1,4 +1,7 @@
+import axios from 'axios';
 import React, { Component } from 'react';
+import Validation from './Validation';
+
 
 export default class CreateCourse extends Component {
   
@@ -6,7 +9,8 @@ export default class CreateCourse extends Component {
     title: '',
     description: '',
     estimatedTime: '',
-    materialsNeeded: ''
+    materialsNeeded: '',
+    errors: []
   }
 
   cancel = (e) => {
@@ -27,24 +31,32 @@ export default class CreateCourse extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    const { title, description, estimatedTime, materialsNeeded } = this.state;
+    const { title, description, estimatedTime, materialsNeeded } = this.state; 
+    const { encodedCredentials, authUser } = this.props.context;
     const course = { title, description, estimatedTime, materialsNeeded };
-    console.log(course);
-    this.props.history.push('/');
+    course.userId = authUser.id;
+
+    axios.post("http://localhost:5000/api/courses", 
+    course,
+    { headers: {'Authorization': `Basic ${encodedCredentials}`} })
+      .then(response => {
+        console.log(response.status);
+        this.props.history.push('/')
+      })
+      .catch(err => {
+        const errors = err.response.data;
+        this.setState({ errors });
+        console.error(err);        
+      });
   }
 
   render() {
+    const { firstName, lastName } = this.props.context.authUser;
     return (
       <main>
         <div className="wrap">
           <h2>Create Course</h2>
-          <div className="validation--errors">
-            <h3>Validation Errors</h3>
-              <ul>
-                <li>TEST</li>
-                <li>TEST</li>
-              </ul>
-          </div>
+          <Validation errors={this.state.errors}/>
 
           <form onSubmit={this.submit}>
             <div className="main--flex">
@@ -52,17 +64,17 @@ export default class CreateCourse extends Component {
                 <label htmlFor="title">Course Title</label>
                 <input id="title" name="title" type="text" onChange={this.change}/>
 
-                <p>By TEST TEXT</p>
+                <p>By {`${firstName} ${lastName}`}</p>
 
                 <label htmlFor="description">Course Description</label>
-                <textarea id="description" name="description"></textarea>
+                <textarea id="description" name="description" onChange={this.change} ></textarea>
               </div>
               <div>
                 <label htmlFor="estimatedTime">Estimated Time</label>
-                <input id="estimatedTime" name="estimatedTime" type="text" />
+                <input id="estimatedTime" name="estimatedTime" type="text" onChange={this.change} />
 
                 <label htmlFor="materialsNeeded">Materials Needed</label>
-                <textarea id="materialsNeeded" name="materialsNeeded"></textarea>
+                <textarea id="materialsNeeded" name="materialsNeeded" onChange={this.change}></textarea>
               </div>
             </div>
             <button className="button" type="submit">Create Course</button>
