@@ -1,5 +1,9 @@
 import React from 'react';
 
+
+/**
+ * A Component to display when a page/course is not found.
+ */
 export default function NotFound() {
   return (
     <main>

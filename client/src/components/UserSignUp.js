@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import Validation from './Validation';
 
 
+/**
+ * User sign up form component
+ */
 export default class UserSignUp extends Component {
 
   state = {
@@ -15,16 +18,30 @@ export default class UserSignUp extends Component {
     errors: []
   }
 
+  /**
+   * If user is already signed in, asks to log out before Sign up.
+   */
   componentDidMount() {
     if (this.props.context.authUser) {
       this.props.history.push('/signuperror')
     }
   }
+
+  /**
+   * Redirects user to front page if cancel is clicked.
+   * 
+   * @param {event} e 
+   */
   cancel = (e) => {
     e.preventDefault();
     this.props.history.push('/');
   }
 
+  /**
+   * Keeps track of all form changes and updates the state values.
+   * 
+   * @param {event} e 
+   */
   change = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -36,6 +53,13 @@ export default class UserSignUp extends Component {
     });
   }
 
+  /**
+   * Submits the form details when submit button is clicked. If succesful, redirects 
+   * to front page. If validation fails, displays the validation errors, if unexpected
+   * error, redirects to specific error page.
+   * 
+   * @param {event} e 
+   */
   submit = (e) => {
     e.preventDefault();
     const { firstName, lastName, emailAddress, password, confirmPassword } = this.state;

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Validation from './Validation';
 
 
+/**
+ * User Sign in form component.
+ */
 export default class UserSignIn extends Component {
 
   state = {
@@ -10,17 +13,30 @@ export default class UserSignIn extends Component {
     errors: []
   }
 
+  /**
+   * If user is already logged in, redirects to the front page.
+   */
   componentDidMount() {
     if (this.props.context.authUser) {
       this.props.history.push('/');
     }
   }
 
+  /**
+   * If user clicks cancel, redirects to the front page.
+   * 
+   * @param {event} e 
+   */
   cancel = (e) => {
     e.preventDefault();
     this.props.history.push('/');
   }
 
+  /**
+   * Keeps track of changes in the form fields and updates the state values.
+   * 
+   * @param {event} e 
+   */
   change = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -32,6 +48,13 @@ export default class UserSignIn extends Component {
     })
   }
 
+  /**
+   * When submit is clicked, signs user in and redirects the user to the previous page 
+   * before sign in route. If the login credentials are wrong, displays an error above
+   * the form. If there's an unexpected error, redirects to '/error'.
+   * 
+   * @param {event} e 
+   */
   submit = (e) => {
     e.preventDefault();
     const { emailAddress, password } = this.state;

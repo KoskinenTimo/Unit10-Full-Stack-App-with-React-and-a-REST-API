@@ -1,5 +1,9 @@
 import React from 'react';
 
+
+/**
+ * A Component to display page for unexpected errors.
+ */
 export default function UnhandledError() {
   return (
     <main>

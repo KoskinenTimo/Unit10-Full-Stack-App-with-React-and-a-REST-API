@@ -3,12 +3,22 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
+
+/**
+ * A Component to view specific course details. Update and Delete buttons visible
+ * to course owner only.
+ */
 export default class CourseDetail extends Component {
 
   state = {
     course: null
   };
 
+  /**
+   * Loads the course data from the API. If the course data is empty, 
+   * redirects to '/notfound'. If there's an error with status 500,
+   * redirects to '/error'.
+   */
   componentDidMount() {
     const courseId = this.props.match.params.id;
     axios.get(`http://localhost:5000/api/courses/${courseId}`)

@@ -2,8 +2,16 @@ import axios from 'axios';
 import React, { Component } from 'react';
 
 
+/**
+ * A Component to show confirmation page for deleting a course.
+ */
 export default class DeleteCourse extends Component {
 
+  /**
+   * Checks if the course exists, if not, redirects to '/notfound'. If authenticated
+   * user is not the owner of the course, redirect to '/forbidden'. If there's an
+   * unexpected error, redirects to '/error'.
+   */
   componentDidMount() {
     const id = this.props.match.params.id;
     axios.get(`http://localhost:5000/api/courses/${id}`)
@@ -22,6 +30,11 @@ export default class DeleteCourse extends Component {
       });
   }
 
+  /**
+   * When a submit button is clicked, course delete API request is made. If succesful,
+   * redirects to front page. If there's an unexpected error, redirects to '/error'.
+   * @param {event} e 
+   */
   submit = (e) => {
     e.preventDefault();
     const { id } = this.props.match.params;
@@ -40,6 +53,12 @@ export default class DeleteCourse extends Component {
       });
   }
 
+  /**
+   * When cancel button is clicked, no changes are made and user is redirected to the
+   * front page.
+   * 
+   * @param {event} e 
+   */
   cancel = (e) => {
     e.preventDefault();
     this.props.history.push('/');

@@ -2,12 +2,20 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+
+/**
+ * A Component to view all courses and a link to create new course.
+ */
 export default class Courses extends Component {
 
   state = {
     courses: []
   }
 
+  /**
+   * Loads all courses from the API. If succesful, updates the state with courses data.
+   * If there's an error with status 500, redirects to '/error'.
+   */
   componentDidMount() {
     axios.get("http://localhost:5000/api/courses")
       .then(response => {
@@ -21,6 +29,9 @@ export default class Courses extends Component {
       })
   }
 
+  /**
+   * Renders course details from the state courses list.
+   */
   renderCourses() {
     return this.state.courses.map(course =>
       <Link className="course--module course--link" to={`/courses/${course.id}`} key={course.id}>

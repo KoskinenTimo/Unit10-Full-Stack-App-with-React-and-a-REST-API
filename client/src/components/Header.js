@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
+/**
+ * A Header component to be displayed on all pages. If user is signed in, hides Sign up and 
+ * Sign in, instead shows Welcome message and Sign out.
+ */
 export default class Header extends React.Component {
 
   render () {

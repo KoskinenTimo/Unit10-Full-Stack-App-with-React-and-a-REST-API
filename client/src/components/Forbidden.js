@@ -1,6 +1,9 @@
 import React from 'react';
 
 
+/**
+ * A Component to display page when user is forbidden to view a route.
+ */
 export default function Forbidden(props) {
   return (
     <main>

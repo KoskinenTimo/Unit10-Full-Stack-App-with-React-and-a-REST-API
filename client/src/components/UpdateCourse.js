@@ -3,6 +3,9 @@ import axios from 'axios';
 import Validation from './Validation';
 
 
+/**
+ * A component to update course details.
+ */
 export default class UpdateCourse extends Component {
   
   state = {
@@ -15,6 +18,12 @@ export default class UpdateCourse extends Component {
     errors: []
   }
 
+  /**
+   * Loads the course, if it doesn't exist, redirects to '/notfound'. If the authenticated
+   * user is not the owner of the course, redirects to '/forbidden'. If there's an 
+   * unexpected error, redirects to '/error'. If everything is ok, sets the state values 
+   * with provided course details.
+   */
   componentDidMount() {
     const id = this.props.match.params.id;
     axios.get(`http://localhost:5000/api/courses/${id}`)
@@ -37,6 +46,11 @@ export default class UpdateCourse extends Component {
       });
   }
 
+  /**
+   * Keeps track of all the changes in form fields and updates the state values.
+   * 
+   * @param {event} e 
+   */
   change = (e) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -49,11 +63,24 @@ export default class UpdateCourse extends Component {
 
   }
 
+  /**
+   * If cancel button is clicked, no changes to course are made and user is redirected to the
+   * front page.
+   * 
+   * @param {event} e 
+   */
   cancel = (e) => {
     e.preventDefault();
     this.props.history.push('/');
   }
 
+  /**
+   * When submit button is clicked, update call is made to the API. If succesfull, redirects to 
+   * the front page. If there's an error with status 400, Validation component displays the errors
+   * above the form. If there's an unexpected error with status 500, user is redirected to '/error'.
+   * 
+   * @param {event} e 
+   */
   submit = (e) => {
     e.preventDefault();
     const id = this.props.match.params.id;
@@ -73,26 +100,10 @@ export default class UpdateCourse extends Component {
         if (err.response.status === 400 ) {
           const { errors } = err.response.data;
           this.setState({ errors });
-        } else {
-          console.error(err);
-        }
+        } else if (err.response.status === 500) {
+          this.props.history.push('/error')
+        }  
       });
-  }
-
-  showErrors = () => {   
-    if (this.state.errors.length) {
-      const errors = this.state.errors.map((error, index) => <li key={index}>{error}</li>);
-      return (
-        <div className="validation--errors">
-          <h3>Validation Errors</h3>
-          <ul>
-            {errors}
-          </ul>
-        </div>
-      );
-    } else {
-      return null;
-    }
   }
 
   render() {

@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import Validation from './Validation';
 
 
+/**
+ * A Component to display form page for creating a new course.
+ */
 export default class CreateCourse extends Component {
   
   state = {
@@ -13,11 +16,22 @@ export default class CreateCourse extends Component {
     errors: []
   }
 
+  /**
+   * If the 'Cancel' button is clicked, not course is created and user is redirected to 
+   * the front page.
+   * 
+   * @param {event} e 
+   */
   cancel = (e) => {
     e.preventDefault();
     this.props.history.push('/');
   }
 
+  /**
+   * Keeps track of all the change in form fields and updates the state values.
+   * 
+   * @param {event} e 
+   */
   change = (e) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -29,6 +43,14 @@ export default class CreateCourse extends Component {
     });
   }
 
+  /**
+   * When the submit button is clicked, make a API POST request. If succesful and status
+   * is 201, redirects the user to given location header from the API to view the created
+   * course details. If there's a validation error, displays errors above the form.
+   * If there's an unpexpected error from the api, status 500, redirects to '/error'.
+   * 
+   * @param {event} e 
+   */
   submit = (e) => {
     e.preventDefault();
     const { title, description, estimatedTime, materialsNeeded } = this.state; 
@@ -40,8 +62,9 @@ export default class CreateCourse extends Component {
     course,
     { headers: {'Authorization': `Basic ${encodedCredentials}`} })
       .then(response => {
-        console.log(response.status);
-        this.props.history.push('/')
+        if(response.status === 201) {
+          this.props.history.push(response.headers.location);
+        }
       })
       .catch(err => {
         const errors = err.response.data;

@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
+/**
+ * A Component to display page to request Signing out when user is trying to Sign Up
+ * while logged in.
+ */
 export default function SignOutRequest() {
   return(
     <main>

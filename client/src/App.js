@@ -35,6 +35,10 @@ const UpdateCourseWithContext = withContext(UpdateCourse);
 const DeleteCourseWithContext = withContext(DeleteCourse);
 const UserSignUpWithContext = withContext(UserSignUp);
 
+
+/**
+ * Hold all only the Router Routes and controll context sharing.
+ */
 function App() {
   return (
     <Router>
