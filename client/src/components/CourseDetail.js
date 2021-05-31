@@ -15,8 +15,15 @@ export default class CourseDetail extends Component {
       .then(response => {
         const course = response.data;        
         this.setState({ course });
+        if (course === null) {
+          this.props.history.push('/notfound');
+        }
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        if (err.response.status === 500) {
+          this.props.history.push('/error')
+        }
+      });
   }
 
   render() {

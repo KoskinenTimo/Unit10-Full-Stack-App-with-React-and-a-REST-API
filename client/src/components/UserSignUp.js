@@ -15,6 +15,11 @@ export default class UserSignUp extends Component {
     errors: []
   }
 
+  componentDidMount() {
+    if (this.props.context.authUser) {
+      this.props.history.push('/signuperror')
+    }
+  }
   cancel = (e) => {
     e.preventDefault();
     this.props.history.push('/');
@@ -46,9 +51,9 @@ export default class UserSignUp extends Component {
         if (err.response.status === 400 ) {
           const errors = err.response.data;
           this.setState({ errors });
-        } else {
-          console.error(err)
-        }
+        } else if (err.response.status === 500) {
+          this.props.history.push('/error')
+        }         
       });
   }
 

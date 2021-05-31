@@ -46,7 +46,9 @@ export default class CreateCourse extends Component {
       .catch(err => {
         const errors = err.response.data;
         this.setState({ errors });
-        console.error(err);        
+        if (err.response.status === 500) {
+          this.props.history.push('/error')
+        }        
       });
   }
 

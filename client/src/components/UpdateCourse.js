@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Validation from './Validation';
 
+
 export default class UpdateCourse extends Component {
   
   state = {
@@ -18,11 +19,22 @@ export default class UpdateCourse extends Component {
     const id = this.props.match.params.id;
     axios.get(`http://localhost:5000/api/courses/${id}`)
       .then(response => {
-        const { title, description, estimatedTime, materialsNeeded } = response.data;
-        const { firstName, lastName } = response.data.teacher;
-        this.setState({ title, description, estimatedTime, materialsNeeded, firstName, lastName });
+        if (response.data === null) {
+          this.props.history.push('/notfound')
+         
+        } else if (response.data.teacher.id !== this.props.context.authUser.id) {
+            this.props.history.push('/forbidden');
+        } else {           
+          const { title, description, estimatedTime, materialsNeeded } = response.data;
+          const { firstName, lastName } = response.data.teacher;
+          this.setState({ title, description, estimatedTime, materialsNeeded, firstName, lastName });
+        }
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        if (err.response.status === 500) {
+          this.props.history.push('/error')
+        } 
+      });
   }
 
   change = (e) => {
@@ -53,8 +65,9 @@ export default class UpdateCourse extends Component {
     course,
     { headers: {'Authorization': `Basic ${encodedCredentials}`} })
       .then(response => {
-        console.log(response);
-        this.props.history.push('/');
+        if (response.status === 204) {
+          this.props.history.push('/');
+        }        
       })
       .catch(err => {
         if (err.response.status === 400 ) {

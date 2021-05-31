@@ -16,12 +16,16 @@ import UserSignIn from './components/UserSignIn';
 import UpdateCourse from './components/UpdateCourse';
 import UserSignOut from './components/UserSignOut';
 import DeleteCourse from './components/DeleteCourse'
+import UnhandledError from './components/UnhandledError';
+import Forbidden from './components/Forbidden';
+import SignOutRequest from './components/SignOutRequest';
 
 // Private Route wrapper
 import PrivateRoute from './PrivateRoute';
 
 // Context and wrapping with context
 import withContext from './Context';
+
 const UserSignOutWithContext = withContext(UserSignOut);
 const UserSignInWithContext = withContext(UserSignIn);
 const HeaderWithContext = withContext(Header);
@@ -29,7 +33,7 @@ const CourseDetailWithContext = withContext(CourseDetail);
 const CreateCourseWithContext = withContext(CreateCourse)
 const UpdateCourseWithContext = withContext(UpdateCourse);
 const DeleteCourseWithContext = withContext(DeleteCourse);
-
+const UserSignUpWithContext = withContext(UserSignUp);
 
 function App() {
   return (
@@ -42,9 +46,12 @@ function App() {
           <Route exact path="/courses/:id" component={CourseDetailWithContext}/>
           <PrivateRoute path="/courses/:id/update" component={UpdateCourseWithContext} />
           <PrivateRoute path="/courses/:id/delete" component={DeleteCourseWithContext} />
-          <Route path="/signup" component={UserSignUp} />
+          <Route exact path="/signup" component={UserSignUpWithContext} />
+          <Route path="/signuperror" component={SignOutRequest} />
           <Route path="/signin" component={UserSignInWithContext} />
           <Route path="/signout" component={UserSignOutWithContext} />
+          <Route path="/forbidden" component={Forbidden} />
+          <Route path="/error" component={UnhandledError} />
           <Route component={NotFound} />
         </Switch>
       

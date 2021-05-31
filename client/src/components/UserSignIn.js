@@ -49,9 +49,9 @@ export default class UserSignIn extends Component {
         }
       })
       .catch(err => {
-        console.error(err);
-        console.log("test");
-        this.props.history.push('/error')
+        if (err.response.status === 500) {
+          this.props.history.push('/error')
+        } 
       })
     
   }

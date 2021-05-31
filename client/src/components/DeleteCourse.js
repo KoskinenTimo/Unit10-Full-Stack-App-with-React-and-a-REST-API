@@ -1,7 +1,26 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 
+
 export default class DeleteCourse extends Component {
+
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    axios.get(`http://localhost:5000/api/courses/${id}`)
+      .then(response => {
+        if (response.data === null) {
+          this.props.history.push('/notfound')
+         
+        } else if (response.data.teacher.id !== this.props.context.authUser.id) {
+            this.props.history.push('/forbidden');
+        }
+      })
+      .catch(err => {
+        if (err.response.status === 500) {
+          this.props.history.push('/error')
+        } 
+      });
+  }
 
   submit = (e) => {
     e.preventDefault();
@@ -15,7 +34,9 @@ export default class DeleteCourse extends Component {
         }
       })
       .catch(err => {
-        console.error(err);
+        if (err.response.status === 500) {
+          this.props.history.push('/error')
+        } 
       });
   }
 

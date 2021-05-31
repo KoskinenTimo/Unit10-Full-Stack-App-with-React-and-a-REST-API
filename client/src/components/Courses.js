@@ -14,7 +14,11 @@ export default class Courses extends Component {
         const courses = response.data;
         this.setState({ courses });
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        if (err.response.status === 500) {
+          this.props.history.push('/error')
+        }
+      })
   }
 
   renderCourses() {
