@@ -63,22 +63,27 @@ export default class UserSignUp extends Component {
   submit = (e) => {
     e.preventDefault();
     const { firstName, lastName, emailAddress, password, confirmPassword } = this.state;
-    const user = { firstName, lastName, emailAddress, password, confirmPassword };
-    axios.post("http://localhost:5000/api/users", user )
-      .then(response => {
-        if (response.status === 201) {
-          console.log("Account created succesfully!");
-          this.props.history.push('/')
-        }      
-      })
-      .catch(err => {
-        if (err.response.status === 400 ) {
-          const errors = err.response.data;
-          this.setState({ errors });
-        } else if (err.response.status === 500) {
-          this.props.history.push('/error')
-        }         
-      });
+    if (password !== confirmPassword) {
+      const errors = ["Password and confirm password did not match."];
+      this.setState({ errors });
+    } else {      
+      const user = { firstName, lastName, emailAddress, password, confirmPassword };
+      axios.post("http://localhost:5000/api/users", user )
+        .then(response => {
+          if (response.status === 201) {
+            console.log("Account created succesfully!");
+            this.props.history.push('/')
+          }      
+        })
+        .catch(err => {
+          if (err.response.status === 400 ) {
+            const errors = err.response.data;
+            this.setState({ errors });
+          } else if (err.response.status === 500) {
+            this.props.history.push('/error')
+          }         
+        });
+    }
   }
 
   render() {

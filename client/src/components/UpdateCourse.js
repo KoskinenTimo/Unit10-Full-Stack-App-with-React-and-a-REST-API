@@ -93,7 +93,7 @@ export default class UpdateCourse extends Component {
     { headers: {'Authorization': `Basic ${encodedCredentials}`} })
       .then(response => {
         if (response.status === 204) {
-          this.props.history.push('/');
+          this.props.history.push(`/courses/${id}`);
         }        
       })
       .catch(err => {
