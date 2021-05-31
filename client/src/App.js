@@ -56,7 +56,7 @@ function App() {
           <Route path="/signout" component={UserSignOutWithContext} />
           <Route path="/forbidden" component={Forbidden} />
           <Route path="/error" component={UnhandledError} />
-          <Route component={NotFound} />
+          <Route path={["/notfound", ""]} component={NotFound} />
         </Switch>
       
     </Router>
