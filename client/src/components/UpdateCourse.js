@@ -64,14 +64,15 @@ export default class UpdateCourse extends Component {
   }
 
   /**
-   * If cancel button is clicked, no changes to course are made and user is redirected to the
-   * front page.
+   * If the cancel button is clicked, no changes to course are made and user is redirected to the
+   * course details page.
    * 
    * @param {event} e 
    */
   cancel = (e) => {
     e.preventDefault();
-    this.props.history.push('/');
+    const id = this.props.match.params.id;
+    this.props.history.push(`/courses/${id}`);
   }
 
   /**

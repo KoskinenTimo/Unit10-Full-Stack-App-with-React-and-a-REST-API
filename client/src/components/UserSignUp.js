@@ -72,7 +72,14 @@ export default class UserSignUp extends Component {
         .then(response => {
           if (response.status === 201) {
             console.log("Account created succesfully!");
-            this.props.history.push('/')
+            const authUser = this.props.context.actions.signIn(emailAddress,password);
+            if (authUser) {
+              this.props.history.push('/');
+            } else {
+              this.props.history.push('/error');
+            }
+            
+
           }      
         })
         .catch(err => {

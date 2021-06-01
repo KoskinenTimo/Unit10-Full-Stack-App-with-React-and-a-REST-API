@@ -55,28 +55,19 @@ export default class UserSignIn extends Component {
    * 
    * @param {event} e 
    */
-  submit = (e) => {
+  submit = async (e) => {
     e.preventDefault();
     const { emailAddress, password } = this.state;
     const { from } = this.props.location.state || { from: { pathname: '/'} };
-    const encodedCredentials = btoa(`${emailAddress}:${password}`);
-
-    this.props.context.actions.signIn(encodedCredentials)
-      .then(user => {
-        
-        if (user) {
-          this.props.history.push(from);
-        } else {
-          const errors = ['Sign in was unsuccesful!'];
-          this.setState({ errors });
-        }
-      })
-      .catch(err => {
-        if (err.response.status === 500) {
-          this.props.history.push('/error')
-        } 
-      })
-    
+    const response = await this.props.context.actions.signIn(emailAddress,password);
+    if (response === 200) {
+      this.props.history.push(from);
+    } else if (response === 500) {
+      this.props.history.push('/error');
+    } else {
+      const errors = ['Sign in was unsuccesful!'];
+      this.setState({ errors });
+    }    
   }
 
   render() {

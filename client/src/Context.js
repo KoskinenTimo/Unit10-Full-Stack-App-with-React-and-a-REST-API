@@ -23,7 +23,9 @@ export class Provider extends Component {
    * @param {String} encodedCredentials 
    * @returns 'authUser' object with user details
    */
-  signIn = async (encodedCredentials) => {
+  signIn = async (emailAddress,password) => {
+    const encodedCredentials = btoa(`${emailAddress}:${password}`);
+    let status;
     let authUser;
     await axios.get("http://localhost:5000/api/users", { headers: {'Authorization': `Basic ${encodedCredentials}`} })
       .then(response => {
@@ -32,12 +34,12 @@ export class Provider extends Component {
         const cookieOptions = { expires: 1 }
         Cookies.set('authUser', JSON.stringify(authUser),cookieOptions);
         Cookies.set('encodedCredentials', JSON.stringify(encodedCredentials),cookieOptions);
+        status = response.status;
       })
-      .catch(err => {        
-        console.error(err);
+      .catch(err => {
+        status = err.response.status;        
       });
-    return authUser;
-    
+    return status;
   }
 
   /**
